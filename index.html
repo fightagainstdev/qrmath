@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <!--
+Tower: https://blackspirestudio.itch.io/medieval-pixel-art-asset-free
+  -->
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>数字拆楼</title>
+    <link href="./favicon.png" rel="icon shortcut" />
+    <link href="./style.css" rel="stylesheet" />
+    <style id="s"></style>
+  </head>
+  <body data-s="title">
+    <button type="button" id="soundButton"></button>
+    <section id="title">
+      <dialog id="titleDialog">
+        <form method="dialog">
+          <h1 class="title">数字拆楼(LUMIN制作)</h1>
+          <button class="button">播放 <small>带声音</small></button>
+          <button class="button" value="no-sound">
+            播放 <small>无声音</small>
+          </button>
+          <button class="button" value="editor">
+            <small>关卡编辑器</small>
+          </button>
+        </form>
+      </dialog>
+    </section>
+    <section id="menu">
+      <dialog id="menuDialog">
+        <form method="dialog">
+          <h2 class="title">选择关卡</h2>
+          <nav id="levelList"></nav>
+        </form>
+      </dialog>
+    </section>
+    <aside data-t="0">
+      <p>欢迎来到<b>数字拆楼</b>！</p>
+      <p>你的目标是通过战斗怪物来征服塔楼。</p>
+      <p>点击这个小球来杀死它！</p>
+    </aside>
+
+    <aside data-t="1">
+      <p>干得好！当你杀死怪物时，你会获得它的力量。</p>
+      <p>
+        为了赢得战斗，你必须拥有比目标<b>更多</b>的力量：如果你拥有相同的力量，你会输！
+      </p>
+    </aside>
+
+    <aside data-t="3">
+      <p>哦，一些元素球！</p>
+      <p>
+        最后一个拥有45的力量很强大... 但别担心：当你杀死怪物时，你会吸收它的元素，你的<b>下一个</b>攻击会使用它。
+      </p>
+      <p>
+        <span class="e p"></span> 怪物对<span class="e f"></span>攻击弱：你的力量对这个绿色球会算作<b>两倍</b>！
+      </p>
+    </aside>
+
+    <aside data-t="4">
+      <p>
+        别忘了：元素只对你的<b>下一个</b>攻击有效。
+      </p>
+    </aside>
+
+    <aside data-t="5">
+      <p>
+        如果你用更弱的元素战斗元素怪物，你的力量在这个决斗中会被<b>除以</b>二。
+      </p>
+      <p>
+        <b>你在这个关卡开始时拥有<span class="e f"></span>元素</b>，它对<span class="e a"></span>弱...
+      </p>
+    </aside>
+
+    <aside data-t="6">
+      <p>
+        有三种元素：<span class="e f"></span>、<span class="e a"></span> 和 <span class="e p"></span>。
+        <br />
+        每个元素对另一个强：
+      </p>
+      <p>
+        <span class="e f"></span> > <span class="e p"></span> > <span class="e a"></span> > <span class="e f"></span>
+      </p>
+    </aside>
+
+    <aside data-t="9">
+      <p>
+        嗯，小心这些骷髅...
+        <br />当你杀死它们时，你不会获得它们的力量... 你会<b>失去</b>它！
+      </p>
+      <p>如果你自己的力量达到0或以下，<b>你会死</b>！</p>
+    </aside>
+
+    <aside data-t="11">
+      <p>像球一样，骷髅可以附着一些元素。</p>
+    </aside>
+
+    <aside data-t="13">
+      <p>
+        这些巫师有奇怪的魔法...
+        <br />当你杀死它们时，你会获得它们的力量...<b>但同一塔楼的其他怪物也会获得它！</b>
+      </p>
+    </aside>
+
+    <aside data-t="16">
+      <p>元素巫师呢？</p>
+    </aside>
+
+    <aside data-t="19">
+      <p>
+        哦！药水！<br />
+        你不会输给药水：你只需喝它们，你的力量会根据它们的值被修改。
+      </p>
+    </aside>
+
+    <aside data-t="20">
+      <p>嗯... 如果你的力量达到0或以下，你仍然会死...</p>
+    </aside>
+
+    <aside data-t="22">
+      <p>
+        药水也可以包含一些元素！<br />
+        当喝下<b>正</b>药水时，如果你的元素更好，<b>它的效果</b>会被加倍，如果更弱，会被除以二。<br />
+        当喝下<b>负</b>药水时，如果你的元素更弱，<b>它的效果</b>会被加倍，如果更好，会被除以二。<br />
+        在这个关卡喝药水前试着猜你的下一个力量！
+      </p>
+    </aside>
+    <section id="game">
+      <dialog id="gameOverDialog">
+        <form method="dialog">
+          <p class="title split">太糟糕了！</p>
+          <button class="button">重试</button>
+        </form>
+      </dialog>
+      <dialog id="endLevelDialog">
+        <form method="dialog">
+          <p class="title">恭喜！</p>
+          <p id="gameEndMessage" class="split">
+            你完成了所有关卡，你是最棒的！
+          </p>
+          <button class="button">
+            <span class="next">下一个</span>
+            <span class="menu">菜单</span>
+          </button>
+        </form>
+      </dialog>
+      <div id="c" class="tower-container"></div>
+    </section>
+
+    <section id="editor">
+      <aside style="display: block; position: fixed; z-index: 9">
+        <p><b>构建你自己的关卡！</b></p>
+        <label>
+          分享你关卡的直接链接
+          <input
+            readonly
+            value="133"
+            type="url"
+            id="cu"
+            onClick="this.select();"
+          />
+        </label>
+        <div>
+          <a id="ca" class="button" target="_blank"
+            ><small>测试关卡 ⭷</small></a
+          >
+          <hr />
+          <a id="cs" class="button" target="_blank" rel="opener"
+            ><small>保存关卡 ⭷</small></a
+          >
+          <a
+            href="https://qrmath.fightagainstdev.deno.net/your_levels.html"
+            class="button"
+            target="_blank"
+            rel="opener"
+            ><small>你所有的关卡 ⭷</small></a
+          >
+        </div>
+      </aside>
+      <div id="ce" class="tower-container">
+        <div class="tower current">
+          <div class="tower-floor" data-e="none">
+            <div contenteditable class="floor-value value">10</div>
+            <div class="character"></div>
+            <div role="button" tabindex="1" class="e none">◆</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script src="./index.js"></script>
+  </body>
+</html>
